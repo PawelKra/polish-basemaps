@@ -1,0 +1,5 @@
+# Testy jednostkowe budują też natywny cdylib. Funkcje hosta RustGIS (`call`, `result`)
+# istnieją tylko w module WebAssembly, więc na macOS linker musi je zostawić niezdefiniowane
+# (Linux robi to domyślnie). Nie dotyczy buildu wasm32-unknown-unknown.
+[target.'cfg(target_os = "macos")']
+rustflags = ["-C", "link-arg=-undefined", "-C", "link-arg=dynamic_lookup"]

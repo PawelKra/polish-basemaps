@@ -1,0 +1,23 @@
+[package]
+name = "polish-basemaps"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+rust-version = "1.90"
+publish = false
+
+# Moduł WebAssembly wtyczki:
+#   cargo build --release --target wasm32-unknown-unknown
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+rustgis-plugin = { git = "https://github.com/opengeos/rustgis-plugins" }
+
+# Małe, szybkie moduły. Panika przerywa wywołanie: RustGIS zgłasza ją jako błąd wtyczki.
+[profile.release]
+opt-level = "s"
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true

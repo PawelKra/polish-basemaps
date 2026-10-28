@@ -1,0 +1,581 @@
+{
+  "id": "polish-basemaps",
+  "name": "Polish Basemaps",
+  "version": "0.1.0",
+  "description": "Zakładka z polskimi usługami mapowymi: ortofotomapa i mapy GUGiK, działki i budynki z ewidencji, plany miejscowe, granice, osnowy, formy ochrony przyrody, geologia PIG, mapy historyczne i zabytki. Podkłady zastępują się nawzajem, nakładki dokładają się na wierzch.",
+  "author": "Pawel Krapiec",
+  "homepage": "",
+  "license": "MIT",
+  "entry": "plugin.wasm",
+  "abi": 1,
+  "minRustgisVersion": "0.4.0",
+  "permissions": [
+    "edit",
+    "network"
+  ],
+  "commands": [
+    {
+      "id": "orto",
+      "label": "Ortofotomapa",
+      "help": "Ortofotomapa standardowa GUGiK (kafle WMTS).",
+      "icon": "raster_layer",
+      "params": "{\"add\"?: bool (dodaje podkład na wierzch zamiast zastępować obecne)}"
+    },
+    {
+      "id": "orto-hd",
+      "label": "Ortofotomapa\nHD",
+      "help": "Ortofotomapa o wysokiej rozdzielczości GUGiK.",
+      "icon": "raster_layer",
+      "params": "{\"add\"?: bool (dodaje podkład na wierzch zamiast zastępować obecne)}"
+    },
+    {
+      "id": "topo",
+      "label": "Mapa\ntopograficzna",
+      "help": "Rastrowa mapa topograficzna Polski GUGiK.",
+      "icon": "relief",
+      "params": "{\"add\"?: bool (dodaje podkład na wierzch zamiast zastępować obecne)}"
+    },
+    {
+      "id": "ogolnogeograficzna",
+      "label": "Mapa ogólnogeograficzna",
+      "help": "Ogólnogeograficzna mapa Polski GUGiK.",
+      "icon": "basemap",
+      "params": "{\"add\"?: bool (dodaje podkład na wierzch zamiast zastępować obecne)}"
+    },
+    {
+      "id": "krajobrazowa",
+      "label": "Mapa krajobrazowa",
+      "help": "Krajobrazowa mapa Polski GUGiK.",
+      "icon": "basemap",
+      "params": "{\"add\"?: bool (dodaje podkład na wierzch zamiast zastępować obecne)}"
+    },
+    {
+      "id": "hydrograficzna",
+      "label": "Mapa hydrograficzna",
+      "help": "Mapa hydrograficzna Polski 1:50 000 GUGiK.",
+      "icon": "basemap",
+      "params": "{\"add\"?: bool (dodaje podkład na wierzch zamiast zastępować obecne)}"
+    },
+    {
+      "id": "kieg-dzialki",
+      "label": "Działki",
+      "help": "Działki ewidencyjne z numerami (Krajowa Integracja Ewidencji Gruntów). Nakładka: wybierz ją ponownie, żeby ją usunąć.",
+      "icon": "line_layer"
+    },
+    {
+      "id": "kieg-budynki",
+      "label": "Budynki",
+      "help": "Budynki z ewidencji gruntów i budynków (KIEG). Nakładka: wybierz ją ponownie, żeby ją usunąć.",
+      "icon": "line_layer"
+    },
+    {
+      "id": "kiut",
+      "label": "Uzbrojenie\nterenu",
+      "help": "Sieci uzbrojenia terenu (Krajowa Integracja Uzbrojenia Terenu). Nakładka: wybierz ją ponownie, żeby ją usunąć.",
+      "icon": "line_layer"
+    },
+    {
+      "id": "kimp",
+      "label": "Plany\nmiejscowe",
+      "help": "Miejscowe plany zagospodarowania przestrzennego (KIMP). Nakładka: wybierz ją ponownie, żeby ją usunąć.",
+      "icon": "web_map"
+    },
+    {
+      "id": "studium",
+      "label": "Studium",
+      "help": "Studia uwarunkowań i kierunków zagospodarowania przestrzennego gmin. Nakładka: wybierz ją ponownie, żeby ją usunąć.",
+      "icon": "web_map"
+    },
+    {
+      "id": "adresy",
+      "label": "Adresy",
+      "help": "Punkty adresowe i ulice z Państwowego Rejestru Granic. Nakładka: wybierz ją ponownie, żeby ją usunąć.",
+      "icon": "label"
+    },
+    {
+      "id": "ceny",
+      "label": "Ceny\nnieruchomości",
+      "help": "Transakcje z rejestru cen nieruchomości: działki, budynki i lokale. Nakładka: wybierz ją ponownie, żeby ją usunąć.",
+      "icon": "stats"
+    },
+    {
+      "id": "prg",
+      "label": "Granice\nadministracyjne",
+      "help": "Granice państwa, województw, powiatów i gmin (PRG). Nakładka: wybierz ją ponownie, żeby ją usunąć.",
+      "icon": "line_layer"
+    },
+    {
+      "id": "obreby",
+      "label": "Obręby\newidencyjne",
+      "help": "Granice jednostek i obrębów ewidencyjnych (PRG). Nakładka: wybierz ją ponownie, żeby ją usunąć.",
+      "icon": "line_layer"
+    },
+    {
+      "id": "prng",
+      "label": "Nazwy\ngeograficzne",
+      "help": "Urzędowe nazwy miejscowości i obiektów fizjograficznych (PRNG). Nakładka: wybierz ją ponownie, żeby ją usunąć.",
+      "icon": "label"
+    },
+    {
+      "id": "siatka-geo",
+      "label": "Siatka geograficzna",
+      "help": "Siatka stopniowa, minutowa i sekundowa. Nakładka: wybierz ją ponownie, żeby ją usunąć.",
+      "icon": "zoom_world"
+    },
+    {
+      "id": "siatka-km",
+      "label": "Siatka kilometrowa",
+      "help": "Siatka kilometrowa układu 1992. Nakładka: wybierz ją ponownie, żeby ją usunąć.",
+      "icon": "zoom_world"
+    },
+    {
+      "id": "skorowidz-orto",
+      "label": "Skorowidz ortofotomap",
+      "help": "Arkusze ortofotomap z lat 2024–2026 i starszych. Nakładka: wybierz ją ponownie, żeby ją usunąć.",
+      "icon": "raster_layer"
+    },
+    {
+      "id": "skorowidz-zdjec",
+      "label": "Skorowidz zdjęć lotniczych",
+      "help": "Zdjęcia lotnicze z lat 2021–2026. Nakładka: wybierz ją ponownie, żeby ją usunąć.",
+      "icon": "raster_layer"
+    },
+    {
+      "id": "osnowa-pozioma",
+      "label": "Osnowa pozioma",
+      "help": "Podstawowa osnowa geodezyjna pozioma: punkty fundamentalne i bazowe. Nakładka: wybierz ją ponownie, żeby ją usunąć.",
+      "icon": "bookmark"
+    },
+    {
+      "id": "osnowa-wysokosciowa",
+      "label": "Osnowa wysokościowa",
+      "help": "Podstawowa osnowa geodezyjna wysokościowa. Nakładka: wybierz ją ponownie, żeby ją usunąć.",
+      "icon": "bookmark"
+    },
+    {
+      "id": "osnowa-grawimetryczna",
+      "label": "Osnowa grawimetryczna",
+      "help": "Punkty osnowy grawimetrycznej. Nakładka: wybierz ją ponownie, żeby ją usunąć.",
+      "icon": "bookmark"
+    },
+    {
+      "id": "osnowa-magnetyczna",
+      "label": "Osnowa magnetyczna",
+      "help": "Punkty osnowy magnetycznej i izogony. Nakładka: wybierz ją ponownie, żeby ją usunąć.",
+      "icon": "bookmark"
+    },
+    {
+      "id": "osnowa-szczegolowa",
+      "label": "Osnowa szczegółowa",
+      "help": "Szczegółowe osnowy geodezyjne z powiatów (KISOG). Nakładka: wybierz ją ponownie, żeby ją usunąć.",
+      "icon": "bookmark"
+    },
+    {
+      "id": "parki-rezerwaty",
+      "label": "Parki i rezerwaty",
+      "help": "Parki narodowe, parki krajobrazowe i rezerwaty przyrody (GDOŚ). Nakładka: wybierz ją ponownie, żeby ją usunąć.",
+      "icon": "basemap"
+    },
+    {
+      "id": "natura2000",
+      "label": "Natura 2000",
+      "help": "Obszary specjalnej ochrony ptaków i specjalne obszary ochrony siedlisk (GDOŚ). Nakładka: wybierz ją ponownie, żeby ją usunąć.",
+      "icon": "basemap"
+    },
+    {
+      "id": "ochrona-inne",
+      "label": "Pozostałe formy ochrony",
+      "help": "Obszary chronionego krajobrazu, zespoły przyrodniczo-krajobrazowe, użytki ekologiczne, stanowiska dokumentacyjne i pomniki przyrody (GDOŚ). Nakładka: wybierz ją ponownie, żeby ją usunąć.",
+      "icon": "basemap"
+    },
+    {
+      "id": "powodz",
+      "label": "Zagrożenie\npowodziowe",
+      "help": "Obszary szczególnego zagrożenia powodzią (1%) od strony rzek i morza. Nakładka: wybierz ją ponownie, żeby ją usunąć.",
+      "icon": "relief"
+    },
+    {
+      "id": "osuwiska",
+      "label": "Osuwiska",
+      "help": "Osuwiska i tereny zagrożone ruchami masowymi (SOPO, PIG-PIB). Nakładka: wybierz ją ponownie, żeby ją usunąć.",
+      "icon": "relief"
+    },
+    {
+      "id": "podtopienia",
+      "label": "Podtopienia",
+      "help": "Obszary podtopień (PIG-PIB). Nakładka: wybierz ją ponownie, żeby ją usunąć.",
+      "icon": "relief"
+    },
+    {
+      "id": "midas",
+      "label": "Złoża i tereny górnicze",
+      "help": "Udokumentowane złoża kopalin, obszary i tereny górnicze (MIDAS). Nakładka: wybierz ją ponownie, żeby ją usunąć.",
+      "icon": "relief"
+    },
+    {
+      "id": "otwory",
+      "label": "Otwory wiertnicze",
+      "help": "Otwory wiertnicze z Centralnej Bazy Danych Geologicznych. Nakładka: wybierz ją ponownie, żeby ją usunąć.",
+      "icon": "relief"
+    },
+    {
+      "id": "otwory-hydro",
+      "label": "Otwory hydrogeologiczne",
+      "help": "Otwory z Centralnej Bazy Danych Hydrogeologicznych. Nakładka: wybierz ją ponownie, żeby ją usunąć.",
+      "icon": "relief"
+    },
+    {
+      "id": "smgp",
+      "label": "Szczegółowa mapa geologiczna",
+      "help": "Szczegółowa mapa geologiczna Polski 1:50 000 (PIG-PIB). Nakładka: wybierz ją ponownie, żeby ją usunąć.",
+      "icon": "relief"
+    },
+    {
+      "id": "jaskinie",
+      "label": "Jaskinie",
+      "help": "Jaskinie Polski (PIG-PIB). Nakładka: wybierz ją ponownie, żeby ją usunąć.",
+      "icon": "relief"
+    },
+    {
+      "id": "monitoring-wod",
+      "label": "Monitoring wód podziemnych",
+      "help": "Punkty monitoringu wód podziemnych (PIG-PIB). Nakładka: wybierz ją ponownie, żeby ją usunąć.",
+      "icon": "relief"
+    },
+    {
+      "id": "wig25k",
+      "label": "Mapa szczegółowa WIG 1:25 000",
+      "help": "Mapa szczegółowa Wojskowego Instytutu Geograficznego (1918–1939).",
+      "icon": "history",
+      "params": "{\"add\"?: bool (dodaje podkład na wierzch zamiast zastępować obecne)}"
+    },
+    {
+      "id": "wig100k",
+      "label": "Mapa taktyczna WIG 1:100 000",
+      "help": "Mapa taktyczna Polski WIG (1918–1939).",
+      "icon": "history",
+      "params": "{\"add\"?: bool (dodaje podkład na wierzch zamiast zastępować obecne)}"
+    },
+    {
+      "id": "wig300k",
+      "label": "Mapa operacyjna WIG 1:300 000",
+      "help": "Mapa operacyjna WIG (1918–1939).",
+      "icon": "history",
+      "params": "{\"add\"?: bool (dodaje podkład na wierzch zamiast zastępować obecne)}"
+    },
+    {
+      "id": "messtischblatt",
+      "label": "Meßtischblätter 1:25 000",
+      "help": "Niemieckie mapy topograficzne 1:25 000 (1870–1945).",
+      "icon": "history",
+      "params": "{\"add\"?: bool (dodaje podkład na wierzch zamiast zastępować obecne)}"
+    },
+    {
+      "id": "kdr",
+      "label": "Karte des Deutschen Reiches 1:100 000",
+      "help": "Mapa Rzeszy Niemieckiej 1:100 000 (ok. 1900).",
+      "icon": "history",
+      "params": "{\"add\"?: bool (dodaje podkład na wierzch zamiast zastępować obecne)}"
+    },
+    {
+      "id": "kdwr",
+      "label": "Karte des westlichen Russlands 1:100 000",
+      "help": "Mapa zachodniej Rosji 1:100 000 (1914–1920).",
+      "icon": "history",
+      "params": "{\"add\"?: bool (dodaje podkład na wierzch zamiast zastępować obecne)}"
+    },
+    {
+      "id": "kummersberg",
+      "label": "Mapa Galicji Kummersberga 1:115 000",
+      "help": "Administrativ-Karte Galizien und Lodomerien C. R. von Kummersberga.",
+      "icon": "history",
+      "params": "{\"add\"?: bool (dodaje podkład na wierzch zamiast zastępować obecne)}"
+    },
+    {
+      "id": "tkkp",
+      "label": "Topograficzna Karta Królestwa Polskiego",
+      "help": "Topograficzna Karta Królestwa Polskiego 1:126 000 (Mapa Kwatermistrzostwa).",
+      "icon": "history",
+      "params": "{\"add\"?: bool (dodaje podkład na wierzch zamiast zastępować obecne)}"
+    },
+    {
+      "id": "zabytki-nieruchome",
+      "label": "Rejestr zabytków nieruchomych",
+      "help": "Zabytki nieruchome wpisane do rejestru (NID). Nakładka: wybierz ją ponownie, żeby ją usunąć.",
+      "icon": "bookmark"
+    },
+    {
+      "id": "zabytki-archeologiczne",
+      "label": "Zabytki archeologiczne",
+      "help": "Rejestr zabytków archeologicznych (NID). Nakładka: wybierz ją ponownie, żeby ją usunąć.",
+      "icon": "bookmark"
+    },
+    {
+      "id": "pomniki-historii",
+      "label": "Pomniki historii",
+      "help": "Pomniki historii (NID). Nakładka: wybierz ją ponownie, żeby ją usunąć.",
+      "icon": "bookmark"
+    },
+    {
+      "id": "unesco",
+      "label": "Światowe dziedzictwo UNESCO",
+      "help": "Obiekty z Listy światowego dziedzictwa UNESCO w Polsce (NID). Nakładka: wybierz ją ponownie, żeby ją usunąć.",
+      "icon": "bookmark"
+    },
+    {
+      "id": "zdrowie",
+      "label": "Zdrowie",
+      "help": "Szpitale, SOR, nocna pomoc lekarska i apteki. Nakładka: wybierz ją ponownie, żeby ją usunąć.",
+      "icon": "bookmark"
+    },
+    {
+      "id": "edukacja",
+      "label": "Edukacja",
+      "help": "Przedszkola, szkoły podstawowe, licea i inne placówki. Nakładka: wybierz ją ponownie, żeby ją usunąć.",
+      "icon": "bookmark"
+    },
+    {
+      "id": "ludnosc",
+      "label": "Ludność\n(siatka 1 km)",
+      "help": "Liczba ludności w siatce kilometrowej (GUS, NSP 2011). Nakładka: wybierz ją ponownie, żeby ją usunąć.",
+      "icon": "stats"
+    },
+    {
+      "id": "bdl-podzial",
+      "label": "Oddziały\nleśne",
+      "help": "Nadleśnictwa, leśnictwa, oddziały i wydzielenia (BDL). Nakładka: wybierz ją ponownie, żeby ją usunąć.",
+      "icon": "line_layer"
+    },
+    {
+      "id": "bdl-drzewostany",
+      "label": "Drzewostany",
+      "help": "Mapa drzewostanów (BDL). Nakładka: wybierz ją ponownie, żeby ją usunąć.",
+      "icon": "basemap"
+    },
+    {
+      "id": "bdl-siedliska",
+      "label": "Siedliska leśne",
+      "help": "Typy siedliskowe lasu (BDL). Nakładka: wybierz ją ponownie, żeby ją usunąć.",
+      "icon": "basemap"
+    },
+    {
+      "id": "bdl-wlasnosc",
+      "label": "Własność lasów",
+      "help": "Lasy według kategorii własności (BDL). Nakładka: wybierz ją ponownie, żeby ją usunąć.",
+      "icon": "basemap"
+    },
+    {
+      "id": "bdl-zakazy",
+      "label": "Zakazy wstępu\ndo lasu",
+      "help": "Okresowe zakazy wstępu do lasu na tle granic nadleśnictw (BDL). Nakładka: wybierz ją ponownie, żeby ją usunąć.",
+      "icon": "delete"
+    },
+    {
+      "id": "bdl-pozary",
+      "label": "Zagrożenie\npożarowe",
+      "help": "Bieżący stopień zagrożenia pożarowego lasów (BDL). Nakładka: wybierz ją ponownie, żeby ją usunąć.",
+      "icon": "relief"
+    },
+    {
+      "id": "bdl-dojazdy",
+      "label": "Dojazdy pożarowe",
+      "help": "Drogi i punkty dojazdu pożarowego (BDL). Nakładka: wybierz ją ponownie, żeby ją usunąć.",
+      "icon": "line_layer"
+    },
+    {
+      "id": "bdl-lowieckie",
+      "label": "Obwody łowieckie",
+      "help": "Granice obwodów łowieckich (BDL). Nakładka: wybierz ją ponownie, żeby ją usunąć.",
+      "icon": "line_layer"
+    },
+    {
+      "id": "dzialki-z-widoku",
+      "label": "Działki\nz widoku",
+      "help": "Wczytuje działki i budynki z powiatowej usługi WFS EGiB dla widocznego obszaru (skala 1:25 000 lub większa). Powiat ustala usługa ULDK GUGiK.",
+      "icon": "buffer"
+    },
+    {
+      "id": "clear",
+      "label": "Usuń\npodkłady",
+      "help": "Usuwa podkłady wtyczki i wraca do wbudowanego podkładu. Nakładki zostają.",
+      "icon": "delete"
+    },
+    {
+      "id": "clear-overlays",
+      "label": "Usuń\nnakładki",
+      "help": "Usuwa wszystkie nakładki.",
+      "icon": "clear_sel"
+    },
+    {
+      "id": "current",
+      "label": "Bieżące",
+      "help": "Pokazuje na pasku stanu warstwy kafelkowe mapy.",
+      "icon": "stats"
+    }
+  ],
+  "tab": {
+    "label": "Polish Basemaps",
+    "groups": [
+      {
+        "label": "Podkłady",
+        "items": [
+          "orto",
+          "orto-hd",
+          "topo",
+          {
+            "menu": "Mapy\ntematyczne",
+            "icon": "basemap",
+            "help": "Mapy tematyczne GUGiK.",
+            "items": [
+              "ogolnogeograficzna",
+              "krajobrazowa",
+              "hydrograficzna"
+            ]
+          }
+        ]
+      },
+      {
+        "label": "Działki i planowanie",
+        "items": [
+          "kieg-dzialki",
+          "kieg-budynki",
+          "dzialki-z-widoku",
+          "kiut",
+          "kimp",
+          "studium",
+          "adresy",
+          "ceny"
+        ]
+      },
+      {
+        "label": "Granice",
+        "items": [
+          "prg",
+          "obreby",
+          "prng",
+          {
+            "menu": "Siatki i\nskorowidze",
+            "icon": "zoom_world",
+            "help": "Siatki kartograficzne i skorowidze.",
+            "items": [
+              "siatka-geo",
+              "siatka-km",
+              "skorowidz-orto",
+              "skorowidz-zdjec"
+            ]
+          },
+          {
+            "menu": "Osnowy",
+            "icon": "bookmark",
+            "help": "Osnowy geodezyjne.",
+            "items": [
+              "osnowa-pozioma",
+              "osnowa-wysokosciowa",
+              "osnowa-grawimetryczna",
+              "osnowa-magnetyczna",
+              "osnowa-szczegolowa"
+            ]
+          }
+        ]
+      },
+      {
+        "label": "Przyroda",
+        "items": [
+          {
+            "menu": "Lasy\n(BDL)",
+            "icon": "basemap",
+            "help": "Bank Danych o Lasach. Nakładki: wybierz ponownie, żeby usunąć.",
+            "items": [
+              "bdl-podzial",
+              "bdl-drzewostany",
+              "bdl-siedliska",
+              "bdl-wlasnosc",
+              "bdl-dojazdy",
+              "bdl-lowieckie"
+            ]
+          },
+          "bdl-zakazy",
+          "bdl-pozary",
+          {
+            "menu": "Ochrona\nprzyrody",
+            "icon": "basemap",
+            "help": "Formy ochrony przyrody (GDOŚ).",
+            "items": [
+              "parki-rezerwaty",
+              "natura2000",
+              "ochrona-inne"
+            ]
+          },
+          "powodz"
+        ]
+      },
+      {
+        "label": "Geologia",
+        "items": [
+          "osuwiska",
+          "podtopienia",
+          {
+            "menu": "Geologia",
+            "icon": "relief",
+            "help": "Dane Państwowego Instytutu Geologicznego.",
+            "items": [
+              "midas",
+              "otwory",
+              "otwory-hydro",
+              "smgp",
+              "jaskinie",
+              "monitoring-wod"
+            ]
+          }
+        ]
+      },
+      {
+        "label": "Historia",
+        "items": [
+          {
+            "menu": "Mapy\nhistoryczne",
+            "icon": "history",
+            "help": "Mapy archiwalne z serwisu pastmaps IH PAN. Zastępują podkład.",
+            "items": [
+              "wig25k",
+              "wig100k",
+              "wig300k",
+              "messtischblatt",
+              "kdr",
+              "kdwr",
+              "kummersberg",
+              "tkkp"
+            ]
+          },
+          {
+            "menu": "Zabytki",
+            "icon": "bookmark",
+            "help": "Rejestry Narodowego Instytutu Dziedzictwa.",
+            "items": [
+              "zabytki-nieruchome",
+              "zabytki-archeologiczne",
+              "pomniki-historii",
+              "unesco"
+            ]
+          }
+        ]
+      },
+      {
+        "label": "Inne",
+        "items": [
+          "zdrowie",
+          "edukacja",
+          "ludnosc"
+        ]
+      },
+      {
+        "label": "Zarządzanie",
+        "items": [
+          "clear",
+          "clear-overlays",
+          "current"
+        ]
+      }
+    ]
+  }
+}

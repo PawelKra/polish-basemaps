@@ -1,0 +1,4 @@
+target/
+pkg/
+*.rgplugin
+__pycache__/
