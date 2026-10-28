@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "description": "Zakładka z polskimi usługami mapowymi: ortofotomapa i mapy GUGiK, działki i budynki z ewidencji, plany miejscowe, granice, osnowy, formy ochrony przyrody, geologia PIG, mapy historyczne i zabytki. Podkłady zastępują się nawzajem, nakładki dokładają się na wierzch.",
   "author": "Pawel Krapiec",
-  "homepage": "",
+  "homepage": "https://github.com/PawelKra/polish-basemaps",
   "license": "MIT",
   "entry": "plugin.wasm",
   "abi": 1,
@@ -43,9 +43,9 @@
       "params": "{\"add\"?: bool (dodaje podkład na wierzch zamiast zastępować obecne)}"
     },
     {
-      "id": "krajobrazowa",
-      "label": "Mapa krajobrazowa",
-      "help": "Krajobrazowa mapa Polski GUGiK.",
+      "id": "bdot10k",
+      "label": "BDOT10k",
+      "help": "Mapa topograficzna 1:10 000 PIG-PIB z danych BDOT10k: budynki, drogi, lasy, wody. Widoczna od skali ok. 1:15 000.",
       "icon": "basemap",
       "params": "{\"add\"?: bool (dodaje podkład na wierzch zamiast zastępować obecne)}"
     },
@@ -422,13 +422,13 @@
           "orto",
           "orto-hd",
           "topo",
+          "bdot10k",
           {
             "menu": "Mapy\ntematyczne",
             "icon": "basemap",
             "help": "Mapy tematyczne GUGiK.",
             "items": [
               "ogolnogeograficzna",
-              "krajobrazowa",
               "hydrograficzna"
             ]
           }

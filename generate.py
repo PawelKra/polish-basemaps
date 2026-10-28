@@ -28,6 +28,7 @@ BDL = "Źródło: Bank Danych o Lasach (BULiGL, Lasy Państwowe), bdl.lasy.gov.p
 GEOPORTAL = "https://mapy.geoportal.gov.pl/wss"
 INTEGRACJA = "https://integracja.gugik.gov.pl/cgi-bin"
 CBDG = "https://cbdgmapa.pgi.gov.pl/arcgis/services"
+CBDG_REST = "https://cbdgmapa.pgi.gov.pl/arcgis/rest/services"
 PASTMAPS = "https://pastmaps.cenagis.edu.pl/geoserver/ihpan/wms"
 NIDWMS = "https://usluga.zabytek.gov.pl/{}/service.svc/get"
 GDOSWMS = "https://sdi.gdos.gov.pl/wms"
@@ -37,12 +38,18 @@ ORTO_WMTS = (GEOPORTAL + "/service/PZGIK/ORTO/WMTS/StandardResolution?SERVICE=WM
              "&TILEROW={y}&TILECOL={x}&FORMAT=image%2Fjpeg")
 
 
-def wms(base, layers, fmt="image/png"):
-    """Szablon kafla GetMap w EPSG:3857 dla map.addTiles."""
+def wms(base, layers, fmt="image/png", size=256):
+    """Szablon kafla GetMap w EPSG:3857 dla map.addTiles.
+
+    size=512 zamawia obraz dwa razy większy niż kafel. Serwer liczy wtedy skalę dwa razy
+    większą, więc warstwy z progiem skali (działki, budynki) rysuje o jeden zoom wcześniej;
+    na ekranie Retina RustGIS przy skali ok. 1:4000 pobiera kafle z16, dla których obraz
+    256 px wypada w skali 1:8500 i KIEG zwraca pusty kafel.
+    """
     parts = urllib.parse.urlsplit(base)
     query = urllib.parse.parse_qsl(parts.query, keep_blank_values=True)
     query += [("SERVICE", "WMS"), ("VERSION", "1.3.0"), ("REQUEST", "GetMap"), ("LAYERS", layers),
-              ("STYLES", ""), ("CRS", "EPSG:3857"), ("WIDTH", "256"), ("HEIGHT", "256"),
+              ("STYLES", ""), ("CRS", "EPSG:3857"), ("WIDTH", str(size)), ("HEIGHT", str(size)),
               ("FORMAT", fmt), ("TRANSPARENT", "TRUE")]
     q = urllib.parse.urlencode(query, safe=":/,")
     return urllib.parse.urlunsplit(parts._replace(query=q)) + "&BBOX={bbox-epsg-3857}"
@@ -58,29 +65,33 @@ L = [
      wms(GEOPORTAL + "/service/img/guest/TOPO/MapServer/WMSServer", "Raster"), GUGIK, 0, 18),
     ("ogolnogeograficzna", "Mapa ogólnogeograficzna", "Ogólnogeograficzna mapa Polski GUGiK.", "basemap", False,
      wms(GEOPORTAL + "/service/img/guest/Ogolnogeograficzna/MapServer/WMSServer", "Ogolnogeograficzna"), GUGIK, 0, 16),
-    ("krajobrazowa", "Mapa krajobrazowa", "Krajobrazowa mapa Polski GUGiK.", "basemap", False,
-     wms(GEOPORTAL + "/service/img/guest/Krajobrazowa/MapServer/WMSServer", "Krajobrazowa"), GUGIK, 0, 16),
+    # Mapa 1:10 000 PIG-PIB z danych BDOT10k przez ArcGIS REST export (ok. 0,5 s na kafel; kompozycja
+    # BDOT10k w WMS GUGiK renderuje kafel 40-60 s i RustGIS go nie doczekuje). Warstwy PIG mają próg
+    # 1:10 000, więc obraz 512 px: treść od z14.
+    ("bdot10k", "BDOT10k", "Mapa topograficzna 1:10 000 PIG-PIB z danych BDOT10k: budynki, drogi, lasy, wody. Widoczna od skali ok. 1:15 000.", "basemap", False,
+     CBDG_REST + "/mapa_topo/bdot_10k/MapServer/export?bbox={bbox-epsg-3857}&bboxSR=3857&imageSR=3857"
+     "&size=512,512&format=png&transparent=false&f=image", PIG + ", dane BDOT10k " + GUGIK, 14, 19),
     ("hydrograficzna", "Mapa hydrograficzna", "Mapa hydrograficzna Polski 1:50 000 GUGiK.", "basemap", False,
      wms(GEOPORTAL + "/service/img/guest/HYDRO/MapServer/WMSServer", "Raster"), GUGIK, 12, 16),
 
     # Działki i planowanie
     ("kieg-dzialki", "Działki", "Działki ewidencyjne z numerami (Krajowa Integracja Ewidencji Gruntów).", "line_layer", True,
-     wms(INTEGRACJA + "/KrajowaIntegracjaEwidencjiGruntow", "dzialki,numery_dzialek"), GUGIK, 15, 20),
+     wms(INTEGRACJA + "/KrajowaIntegracjaEwidencjiGruntow", "dzialki,numery_dzialek", size=512), GUGIK, 16, 20),
     ("kieg-budynki", "Budynki", "Budynki z ewidencji gruntów i budynków (KIEG).", "line_layer", True,
-     wms(INTEGRACJA + "/KrajowaIntegracjaEwidencjiGruntow", "budynki"), GUGIK, 18, 20),
+     wms(INTEGRACJA + "/KrajowaIntegracjaEwidencjiGruntow", "budynki", size=512), GUGIK, 17, 20),
     ("kiut", "Uzbrojenie\nterenu", "Sieci uzbrojenia terenu (Krajowa Integracja Uzbrojenia Terenu).", "line_layer", True,
      wms(INTEGRACJA + "/KrajowaIntegracjaUzbrojeniaTerenu",
          "przewod_wodociagowy,przewod_kanalizacyjny,przewod_elektroenergetyczny,przewod_gazowy,przewod_cieplowniczy,"
-         "przewod_telekomunikacyjny,przewod_specjalny,przewod_niezidentyfikowany,przewod_urzadzenia"), GUGIK, 16, 20),
+         "przewod_telekomunikacyjny,przewod_specjalny,przewod_niezidentyfikowany,przewod_urzadzenia", size=512), GUGIK, 16, 20),
     ("kimp", "Plany\nmiejscowe", "Miejscowe plany zagospodarowania przestrzennego (KIMP).", "web_map", True,
      wms(INTEGRACJA + "/KrajowaIntegracjaMiejscowychPlanowZagospodarowaniaPrzestrzennego",
-         "raster,wektor-str,wektor-lzb,wektor-pow,wektor-lin,wektor-pkt,granice"), GUGIK, 15, 20),
+         "raster,wektor-str,wektor-lzb,wektor-pow,wektor-lin,wektor-pkt,granice", size=512), GUGIK, 14, 20),
     ("studium", "Studium", "Studia uwarunkowań i kierunków zagospodarowania przestrzennego gmin.", "web_map", True,
      wms(GEOPORTAL + "/ext/KrajowaIntegracjaStudiumKierunkowZagospodarowaniaPrzestrzennego", "studium"), GUGIK, 12, 20),
     ("adresy", "Adresy", "Punkty adresowe i ulice z Państwowego Rejestru Granic.", "label", True,
      wms(GEOPORTAL + "/ext/KrajowaIntegracjaNumeracjiAdresowej", "A08_Ulice_Linie,A07_Punkty_adresowe"), GUGIK, 15, 20),
     ("ceny", "Ceny\nnieruchomości", "Transakcje z rejestru cen nieruchomości: działki, budynki i lokale.", "stats", True,
-     wms(INTEGRACJA + "/KrajowaIntegracjaCenNieruchomosci", "dzialki,budynki,lokale"), GUGIK, 16, 20),
+     wms(INTEGRACJA + "/KrajowaIntegracjaCenNieruchomosci", "dzialki,budynki,lokale", size=512), GUGIK, 15, 20),
 
     # Granice i siatki
     ("prg", "Granice\nadministracyjne", "Granice państwa, województw, powiatów i gmin (PRG).", "line_layer", True,
@@ -114,7 +125,7 @@ L = [
      wms(GEOPORTAL + "/service/PZGIK/OsnowaMagnetyczna",
          "izogony,izogony_etykiety,Fundamentalna_magnetyczna,Bazowa_magnetyczna,Fudnamentalna_magnetyczna_etykiety,Bazowa_magnetyczna_etykiety"), GUGIK, 0, 20),
     ("osnowa-szczegolowa", "Osnowa szczegółowa", "Szczegółowe osnowy geodezyjne z powiatów (KISOG).", "bookmark", True,
-     wms(INTEGRACJA + "/KrajowaIntegracjaSzczegolowychOsnowGeodezyjnych", "osnowa-XY,osnowa-H,osnowa-XYH"), GUGIK, 15, 20),
+     wms(INTEGRACJA + "/KrajowaIntegracjaSzczegolowychOsnowGeodezyjnych", "osnowa-XY,osnowa-H,osnowa-XYH", size=512), GUGIK, 14, 20),
 
     # Przyroda
     ("parki-rezerwaty", "Parki i rezerwaty", "Parki narodowe, parki krajobrazowe i rezerwaty przyrody (GDOŚ).", "basemap", True,
@@ -225,8 +236,8 @@ def menu(label, icon, help, items):
 
 tab = {"label": "Polish Basemaps", "groups": [
     {"label": "Podkłady", "items": [
-        "orto", "orto-hd", "topo",
-        menu("Mapy\ntematyczne", "basemap", "Mapy tematyczne GUGiK.", ["ogolnogeograficzna", "krajobrazowa", "hydrograficzna"]),
+        "orto", "orto-hd", "topo", "bdot10k",
+        menu("Mapy\ntematyczne", "basemap", "Mapy tematyczne GUGiK.", ["ogolnogeograficzna", "hydrograficzna"]),
     ]},
     {"label": "Działki i planowanie", "items": [
         "kieg-dzialki", "kieg-budynki", "dzialki-z-widoku", "kiut", "kimp", "studium", "adresy", "ceny",
@@ -279,7 +290,7 @@ commands += EXTRA
 manifest = {
     "id": "polish-basemaps", "name": "Polish Basemaps", "version": "0.1.0",
     "description": "Zakładka z polskimi usługami mapowymi: ortofotomapa i mapy GUGiK, działki i budynki z ewidencji, plany miejscowe, granice, osnowy, formy ochrony przyrody, geologia PIG, mapy historyczne i zabytki. Podkłady zastępują się nawzajem, nakładki dokładają się na wierzch.",
-    "author": "Pawel Krapiec", "homepage": "",
+    "author": "Pawel Krapiec", "homepage": "https://github.com/PawelKra/polish-basemaps",
     "license": "MIT", "entry": "plugin.wasm", "abi": 1, "minRustgisVersion": "0.4.0",
     "permissions": ["edit", "network"],
     "commands": commands, "tab": tab,

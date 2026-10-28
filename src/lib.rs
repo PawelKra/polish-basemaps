@@ -152,10 +152,21 @@ pub fn parse_uldk(text: &str) -> Result<(String, String), String> {
     Ok((teryt.to_string(), name.to_string()))
 }
 
+/// Zasięg okna mapy `[zachód, południe, wschód, północ]` z komendy `map.extent`.
+fn map_extent() -> Option<[f64; 4]> {
+    let out = host::run("map.extent", json!({})).ok()?;
+    let e = out["extent"].as_array()?;
+    let v: Vec<f64> = e.iter().filter_map(Value::as_f64).collect();
+    match v.as_slice() {
+        [w, s, e, n] if w < e && s < n => Some([*w, *s, *e, *n]),
+        _ => None,
+    }
+}
+
 /// Prostokąt `[zachód, południe, wschód, północ]` w stopniach wokół środka widoku.
 ///
-/// `host.view` podaje tylko środek i skalę, więc zasięg liczymy dla typowego okna mapy
-/// (1600 × 1000 px po 0,28 mm). Przy 1:25 000 to około 11 × 7 km.
+/// Zapas, gdy `map.extent` nie odpowie: `host.view` podaje tylko środek i skalę, więc zasięg
+/// liczymy dla typowego okna mapy (1600 × 1000 px po 0,28 mm). Przy 1:25 000 to około 11 × 7 km.
 pub fn view_bbox(lon: f64, lat: f64, scale: f64) -> [f64; 4] {
     let half_w = scale * 0.000_28 * 800.0;
     let half_h = scale * 0.000_28 * 500.0;
@@ -231,7 +242,8 @@ fn dzialki_z_widoku() -> Result<Value, String> {
     }
     // service.add pobiera z WFS całą warstwę (do 50 000 obiektów), bez zasięgu widoku.
     // Składamy więc GetFeature sami: z BBOX widoku i limitem, żeby nie pytać o cały powiat.
-    let bbox = view_bbox(lon, lat, scale);
+    let extent = map_extent();
+    let bbox = extent.unwrap_or_else(|| view_bbox(lon, lat, scale));
     let mut added = Vec::new();
     for (template, label) in [
         (p.dzialki_getfeature, "Działki"),
@@ -247,6 +259,11 @@ fn dzialki_z_widoku() -> Result<Value, String> {
             json!({"url": url, "name": name, "zoom": false, "service": true}),
         )?;
         added.push(name);
+    }
+    // Na mapie bez warstw wektorowych RustGIS przybliża do nowych danych mimo "zoom": false;
+    // wracamy do widoku, który wybrał użytkownik.
+    if let Some(e) = extent {
+        let _ = host::run("map.zoomToExtent", json!({"extent": e}));
     }
     host::notify(&format!("Wczytano z WFS: {}", added.join(", ")));
     Ok(json!({"teryt": teryt, "added": added}))
@@ -295,7 +312,11 @@ mod tests {
         let dzialki = CATALOG.iter().find(|e| e.id == "kieg-dzialki").unwrap();
         let p = add_params(dzialki, false);
         assert_eq!(p["overlay"], true);
-        assert_eq!(p["minZoom"], 15);
+        assert_eq!(p["minZoom"], dzialki.min_zoom);
+        assert!(
+            dzialki.url.contains("WIDTH=512"),
+            "KIEG rysuje działki dopiero w dużej skali"
+        );
     }
 
     #[test]

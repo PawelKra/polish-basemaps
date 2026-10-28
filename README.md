@@ -8,7 +8,7 @@ Podkłady zastępują się nawzajem, a nakładki dokładają się na wierzch. Po
 
 **Polish Basemaps**, na końcu paska zakładek:
 
-- **Podkłady**: Ortofotomapa, Ortofotomapa HD, Mapa topograficzna, **Mapy tematyczne ▾** (3)
+- **Podkłady**: Ortofotomapa, Ortofotomapa HD, Mapa topograficzna, BDOT10k, **Mapy tematyczne ▾** (2)
 - **Działki i planowanie**: Działki, Budynki, Działki z widoku, Uzbrojenie terenu, Plany miejscowe, Studium, Adresy, Ceny nieruchomości
 - **Granice**: Granice administracyjne, Obręby ewidencyjne, Nazwy geograficzne, **Siatki i skorowidze ▾** (4), **Osnowy ▾** (5)
 - **Przyroda**: **Lasy (BDL) ▾** (6), Zakazy wstępu do lasu, Zagrożenie pożarowe, **Ochrona przyrody ▾** (3), Zagrożenie powodziowe
@@ -36,9 +36,10 @@ RustGIS wczytuje WFS tylko w GeoJSON. Według stanu z października 2026 tak udo
 
 ## Ograniczenia
 
-- RustGIS rysuje kafle tylko w Web Mercatorze (EPSG:3857). Usługi WMS są dodawane szablonem GetMap w 3857. Część serwerów GUGiK oddaje 3857, choć go nie ogłasza. Usługi, które przyjmują wyłącznie EPSG:2180, nie są dostępne: BDOT10k, cieniowanie, hipsometria, mapa sozologiczna, LPIS i WMTS GUGiK poza ortofotomapą.
+- RustGIS rysuje kafle tylko w Web Mercatorze (EPSG:3857). Usługi WMS są dodawane szablonem GetMap w 3857. Część serwerów GUGiK oddaje 3857, choć go nie ogłasza. Usługi, które przyjmują wyłącznie EPSG:2180, nie są dostępne: cieniowanie, hipsometria, mapa sozologiczna, LPIS i WMTS GUGiK poza ortofotomapą.
 - KIEG pobiera kafle z serwerów powiatowych: odpowiada wolno (kilka sekund na kafel) i czasem zwraca błąd. Brakujący kafel doładuje się przy przesunięciu mapy.
-- Warstwy ewidencyjne mają progi skali: działki od zoomu 15, budynki od 18, plany miejscowe od 15, ceny nieruchomości od 16.
+- Warstwy ewidencyjne mają progi skali: działki od zoomu 16, budynki od 17, plany miejscowe od 14, ceny nieruchomości od 15. Te warstwy pobierają obrazy 512 px na kafel, bo serwery liczą próg skali z rozmiaru obrazu, a RustGIS na ekranach Retina pobiera kafle o jeden zoom niżej.
+- BDOT10k to mapa topograficzna 1:10 000 PIG-PIB z danych BDOT10k, pobierana przez ArcGIS REST `export` (około 0,5 s na kafel), widoczna od zoomu 14. Kompozycja BDOT10k w WMS GUGiK renderuje kafel 40–60 s i RustGIS go nie doczekuje.
 
 ## Źródła i warunki
 
